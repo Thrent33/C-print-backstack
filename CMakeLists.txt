@@ -12,7 +12,7 @@ file(GLOB_RECURSE SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 )
 
-option(BACKSTACK_BUILD_TESTS "Build tests" ON)
+option(BACKSTACK_BUILD_TESTS "Build tests" OFF)
 
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE include)
