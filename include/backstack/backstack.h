@@ -4,8 +4,6 @@
 
 #define PrintBackStack(MSG) backstack::ShowTraceStack(MSG)
 
-#include <string>
-
 #ifdef _WIN32
 // clang-format off
 #include <stdio.h>
