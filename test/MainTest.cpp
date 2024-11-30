@@ -1,9 +1,13 @@
 #include <gtest/gtest.h>
 #include "backstack/backstack.h"
 
-TEST(Test, Test) {
+void a() {
     auto result = PrintBackStack(NULL);
     printf("%s", result);
+}
+
+TEST(Test, Test) {
+    a();
 }
 
 int main(int argc, char* argv[]) {

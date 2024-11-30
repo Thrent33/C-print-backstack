@@ -17,12 +17,21 @@
 #endif
 
 #define STACK_INFO_LEN 1024
+
+#elif defined(linux)
+#include <cxxabi.h>
+#include <execinfo.h>
+#define UNW_LOCAL_ONLY
+#include <libunwind.h>
+#include <stdio.h>
+
+#include <cstring>
 #endif
 
 namespace backstack {
 
+inline const char* ShowTraceStack(char* szBriefInfo) {
 #ifdef _WIN32
-const char* ShowTraceStack(char* szBriefInfo) {
     static const int MAX_STACK_FRAMES = 12;
     void* pStack[MAX_STACK_FRAMES];
     static char szStackInfo[STACK_INFO_LEN * MAX_STACK_FRAMES];
@@ -57,8 +66,36 @@ const char* ShowTraceStack(char* szBriefInfo) {
     }
 
     return szStackInfo;
-}
+#elif defined(linux)
+    static char szStackInfo[1024 * 12];
+    static char szFrameInfo[1024];
+    strcpy(szStackInfo, szBriefInfo == NULL ? "stack traceback:\n" : szBriefInfo);
+    unw_cursor_t cursor;
+    unw_context_t context;
+
+    unw_getcontext(&context);
+    unw_init_local(&cursor, &context);
+
+    while (unw_step(&cursor) > 0) {
+        unw_word_t offset, pc;
+        char fname[64];
+
+        unw_get_reg(&cursor, UNW_REG_IP, &pc);
+
+        fname[0] = '\0';
+        (void)unw_get_proc_name(&cursor, fname, sizeof(fname), &offset);
+        int status;
+        char* demangled = abi::__cxa_demangle(fname, nullptr, nullptr, &status);
+        if (status == 0) {
+            char tmp_str[1024];
+            sprintf(tmp_str, "\t%s\n", demangled);
+            strcat(szFrameInfo, tmp_str);
+        }
+    }
+    strcat(szStackInfo, szFrameInfo);
+    return szStackInfo;
 #endif
+}
 
 }  // namespace backstack
 

@@ -8,6 +8,8 @@ Get function call stack information
   - MSVC 2017
   - MSVC 2019
   - MSVC 2022
+- Linux (Need libunwind)
+  - GCC 11.4.0 x86
 
 ## How To Use
 

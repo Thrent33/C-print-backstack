@@ -12,10 +12,14 @@ file(GLOB_RECURSE SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h"
 )
 
-option(BACKSTACK_BUILD_TESTS "Build tests" OFF)
+option(BACKSTACK_BUILD_TESTS "Build tests" ON)
 
 add_library(${PROJECT_NAME} INTERFACE)
 target_include_directories(${PROJECT_NAME} INTERFACE include)
+
+if(CMAKE_HOST_UNIX)
+    target_link_libraries(${PROJECT_NAME} INTERFACE unwind)
+endif()
 
 if(BACKSTACK_BUILD_TESTS)
     add_subdirectory(test)
