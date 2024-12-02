@@ -17,3 +17,7 @@ Get function call stack information
 2. put the include file [backstack.h](./include/backstack/backstack.h) in your project
 3. call marco `PrintBackStack(MSG)` to get stack information
 4. print information on the console or file
+
+## How To Disable
+
+add marck `DISABLE_BACKSTACK_APPLICATION` to disable it

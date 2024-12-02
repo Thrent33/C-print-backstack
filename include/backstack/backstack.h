@@ -31,6 +31,9 @@
 namespace backstack {
 
 inline const char* ShowTraceStack(char* szBriefInfo) {
+#ifdef DISABLE_BACKSTACK_APPLICATION
+    return "";
+#else
 #ifdef _WIN32
     static const int MAX_STACK_FRAMES = 12;
     void* pStack[MAX_STACK_FRAMES];
@@ -94,6 +97,7 @@ inline const char* ShowTraceStack(char* szBriefInfo) {
     }
     strcat(szStackInfo, szFrameInfo);
     return szStackInfo;
+#endif
 #endif
 }
 
